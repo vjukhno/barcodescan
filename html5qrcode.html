@@ -97,6 +97,11 @@
     border-radius: 7px;
     font-size: 15px;
   }
+
+  #resume-button {
+    margin-bottom: 30px;
+  }
+
 </style>
 <div class="main">
     <div id="reader">
@@ -114,6 +119,7 @@
       </div>
       <div id="reader-results">
         <div style="display: flex; width: 100%;align-items: center;justify-content: center;">
+          <button class="button" id="resume-button" onClick="resume()" style="display: none">Продолжить сканирование</button>
           <button class="button" id="stopscan-button" onClick="stop()" style="display: none">Стоп</button>
         </div>
         <h3>Результаты</h3>
@@ -141,7 +147,10 @@
        html5QrCodeReader = new Html5Qrcode("scanner-area");
             var cameraId = document.getElementById("camerachoose").value;
             document.getElementById('stopscan-button').style.display = 'block';
+            document.getElementById('resume-button').style.display = 'block';
+            document.getElementById('resume-button').disabled = true;
             document.getElementById('settings').style.display = 'none';
+
             html5QrCodeReader
               .start(
                 cameraId,
@@ -157,6 +166,7 @@
                   textarea.value += decodedText + '\n';
                   console.log(decodedResult);
                   this.html5QrCodeReader.pause(true);
+                  document.getElementById('resume-button').disabled = false;
                 },
                 (errorMessage) => {
                   // parse error, ignore it.
@@ -171,12 +181,17 @@
       if (this.html5QrCodeReader.isScanning) {
         html5QrCodeReader.stop().then((ignore) => {
             document.getElementById('stopscan-button').style.display = 'none';
+            document.getElementById('resume-button').style.display = 'none';
             document.getElementById('settings').style.display = 'block';
             this.html5QrCodeReader.clear();
           }).catch((err) => {
             
           });
       }
+    }
+
+    function resume() {
+      this.html5QrCodeReader.resume();
     }
 
     function getCameras() {
