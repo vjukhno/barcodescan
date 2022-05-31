@@ -117,7 +117,7 @@
 
     function scan() {
        const html5QrCodeReader = new Html5Qrcode("reader");
-            var cameraId = devices[0].id;
+            var cameraId = document.getElementById("camerachoose").value;
             html5QrCodeReader
               .start(
                 cameraId,
@@ -148,6 +148,8 @@
           console.log("getCameras: start");
           if (devices && devices.length) {
               addSelectCameraEl(devices);
+              
+              document.getElementById('permission-button').disabled = true;
               document.getElementById('scan-button').disabled = false;
           }
         })
