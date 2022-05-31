@@ -101,14 +101,16 @@
 <div class="main">
     <div id="reader">
         <div id="scanner-area"></div>
-        <div id="getpermission">
-            <button id="permission-button" onClick="getCameras()">Дать доступ к камере</button>
+        <div id="settings">
+          <div id="getpermission">
+              <button id="permission-button" onClick="getCameras()">Дать доступ к камере</button>
+          </div>
+          <div id="camerachoose-cont">
+            <label>Выбрать камеру:</label>
+            <select id="camerachoose"></select>
+          </div>
+          <button class="button"  id="scan-button" onClick="scan()" disabled>Сканировать</button>
         </div>
-        <div id="camerachoose-cont">
-          <label>Выбрать камеру:</label>
-          <select id="camerachoose"></select>
-        </div>
-        <button class="button"  id="scan-button" onClick="scan()" disabled>Сканировать</button>
       </div>
       <div id="reader-results">
         <div style="display: flex; width: 100%;align-items: center;justify-content: center;">
@@ -139,6 +141,7 @@
        html5QrCodeReader = new Html5Qrcode("scanner-area");
             var cameraId = document.getElementById("camerachoose").value;
             document.getElementById('stopscan-button').style.display = 'block';
+            document.getElementById('settings').style.display = 'none';
             html5QrCodeReader
               .start(
                 cameraId,
@@ -153,6 +156,7 @@
                   let textarea = document.getElementById("result-textarea");
                   textarea.value += decodedText + '\n';
                   console.log(decodedResult);
+                  this.html5QrCodeReader.pause(true);
                 },
                 (errorMessage) => {
                   // parse error, ignore it.
@@ -164,11 +168,15 @@
     }
 
     function stop() {
-      html5QrCodeReader.stop().then((ignore) => {
-          document.getElementById('stopscan-button').style.display = 'none';
-        }).catch((err) => {
-          
-        });
+      if (this.html5QrCodeReader.isScanning) {
+        html5QrCodeReader.stop().then((ignore) => {
+            document.getElementById('stopscan-button').style.display = 'none';
+            document.getElementById('settings').style.display = 'block';
+            this.html5QrCodeReader.clear();
+          }).catch((err) => {
+            
+          });
+      }
     }
 
     function getCameras() {
