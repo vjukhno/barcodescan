@@ -63,7 +63,7 @@
   #permission-button {
     width: 172px;
     margin-bottom: 10px;
-    background: #fbfbfb;
+    background: #e3e3e3;
     border-radius: 8px;
     font-weight: 400;
     border: 1px dashed #cbcbcb;
@@ -103,6 +103,7 @@
     var resultContainer = document.getElementById("qr-reader-results");
 
     function addSelectCameraEl(cameras) {
+      const options = [];
        for (const camera of cameras) {
             const value = camera.id;
             const name = camera.label == null ? value : camera.label;
