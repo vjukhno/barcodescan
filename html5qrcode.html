@@ -1,0 +1,45 @@
+<script src="html5-qrcode.min.js"></script>
+<div>
+  <button onClick="scan()">Сканировать</button>
+</div>
+
+<div id="reader" width="600px" height="600px"></div>
+<div id="qr-reader-results"></div>
+
+<script>
+  var resultContainer = document.getElementById("qr-reader-results");
+
+  function scan() {
+    Html5Qrcode.getCameras()
+      .then((devices) => {
+        console.log("getCameras: start");
+        if (devices && devices.length) {
+          var cameraId = devices[0].id;
+          html5QrCode
+            .start(
+              cameraId,
+              {
+                fps: 10, // Optional, frame per seconds for qr code scanning
+                qrbox: {
+                  width: 250,
+                  height: 250,
+                }, // Optional, if you want bounded box UI
+              },
+              (decodedText, decodedResult) => {
+                document.getElementById("qr-reader-results");
+                div.innerHTML += decodedText;
+              },
+              (errorMessage) => {
+                // parse error, ignore it.
+              }
+            )
+            .catch((err) => {
+              console.log("scan: " + err);
+            });
+        }
+      })
+      .catch((err) => {
+        console.log("getCameras: " + err);
+      });
+  }
+</script>
