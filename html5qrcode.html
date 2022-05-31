@@ -120,7 +120,7 @@
 
   <script>
     var resultContainer = document.getElementById("qr-reader-results");
-
+    var html5QrCodeReader = null;
     function addSelectCameraEl(cameras) {
       const options = [];
        for (const camera of cameras) {
@@ -135,7 +135,7 @@
     }
 
     function scan() {
-       const html5QrCodeReader = new Html5Qrcode("reader");
+       html5QrCodeReader = new Html5Qrcode("reader");
             var cameraId = document.getElementById("camerachoose").value;
             document.getElementById('stopscan-button').style.display = 'block';
             html5QrCodeReader
@@ -150,7 +150,7 @@
                 },
                 (decodedText, decodedResult) => {
                   let textarea = document.getElementById("result-textarea");
-                  textarea.value += decodedText + '/n';
+                  textarea.value += decodedText + '\n';
                   console.log(decodedResult);
                 },
                 (errorMessage) => {
@@ -163,7 +163,7 @@
     }
 
     function stop() {
-      html5QrCode.stop().then((ignore) => {
+      html5QrCodeReader.stop().then((ignore) => {
           document.getElementById('stopscan-button').style.display = 'none';
         }).catch((err) => {
           
