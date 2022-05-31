@@ -1,46 +1,147 @@
 <script src="html5-qrcode.min.js"></script>
-<div>
-  <button onClick="scan()">Сканировать</button>
-</div>
-
-<div id="reader" width="600px" height="600px"></div>
-<div id="qr-reader-results"></div>
-
-<script>
-  var resultContainer = document.getElementById("qr-reader-results");
-
-  function scan() {
-    Html5Qrcode.getCameras()
-      .then((devices) => {
-        console.log("getCameras: start");
-        if (devices && devices.length) {
-          const html5QrCodeReader = new Html5Qrcode("reader");
-          var cameraId = devices[0].id;
-          html5QrCodeReader
-            .start(
-              cameraId,
-              {
-                fps: 10, // Optional, frame per seconds for qr code scanning
-                qrbox: {
-                  width: 250,
-                  height: 250,
-                }, // Optional, if you want bounded box UI
-              },
-              (decodedText, decodedResult) => {
-                document.getElementById("qr-reader-results");
-                div.innerHTML += decodedText;
-              },
-              (errorMessage) => {
-                // parse error, ignore it.
-              }
-            )
-            .catch((err) => {
-              console.log("scan: " + err);
-            });
-        }
-      })
-      .catch((err) => {
-        console.log("getCameras: " + err);
-      });
+<style>
+  .main {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
-</script>
+
+  #reader {
+    flex: 2;
+    position: relative;
+    padding: 0px;
+    border: 1px solid silver;
+    width: 400px;
+    height: 200px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  #reader-results {
+    /* border: 1px solid silver; */
+
+    width: 20%;
+    height: 200px;
+    /* padding: 10px; */
+  }
+
+  #result-textarea {
+    height: calc(100% - 20px);
+    /* padding: 5px 10px; */
+    width: 100%;
+  }
+
+  h3 {
+    font-size: 14px;
+    margin: 0;
+    margin-bottom: 10px;
+    margin-left: 5px;
+  }
+
+  .flex {
+    /* display: flex; */
+    flex-wrap: wrap;
+  }
+  select#camerachoose {
+    width: 170px;
+  }
+  #permission-button {
+    width: 172px;
+    margin-bottom: 10px;
+    background: #fbfbfb;
+    border-radius: 8px;
+    font-weight: 400;
+    border: 1px dashed #cbcbcb;
+    height: 30px;
+    font-size: 15px;
+  }
+
+  #scan-button {
+    width: 150px;
+    margin-top: 51px;
+    background: white;
+    border: 1px solid grey;
+    border-radius: 7px;
+    font-size: 15px;
+  }
+</style>
+<div class="main">
+  <div class="flex">
+    <div id="reader">
+        <div id="getpermission">
+            <button id="permission-button" onClick="getCameras()">Дать доступ к камере</button>
+        </div>
+        <div id="camerachoose-cont">
+          <label>Выбрать камеру:</label>
+          <select id="camerachoose"></select>
+        </div>
+        <button id="scan-button" onClick="scan()" disabled>Сканировать</button>
+      </div>
+      <div id="reader-results">
+        <h3>Результаты</h3>
+        <textarea id="result-textarea"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var resultContainer = document.getElementById("qr-reader-results");
+
+    function addSelectCameraEl(cameras) {
+       for (const camera of cameras) {
+            const value = camera.id;
+            const name = camera.label == null ? value : camera.label;
+            const option = document.createElement("option");
+            option.value = value;
+            option.innerText = name;
+            options.push(option);
+            document.getElementById("camerachoose").appendChild(option);
+        }
+    }
+
+    function scan() {
+       const html5QrCodeReader = new Html5Qrcode("reader");
+            var cameraId = devices[0].id;
+            html5QrCodeReader
+              .start(
+                cameraId,
+                {
+                  fps: 15, // Optional, frame per seconds for qr code scanning
+                  qrbox: {
+                    width: 450,
+                    height: 450,
+                  }, // Optional, if you want bounded box UI
+                },
+                (decodedText, decodedResult) => {
+                  let textarea = document.getElementById("result-textarea");
+                  textarea.value += decodedText;
+                  console.log(decodedResult);
+                },
+                (errorMessage) => {
+                  // parse error, ignore it.
+                }
+              )
+              .catch((err) => {
+                console.log("scan: " + err);
+              });
+    }
+
+    function getCameras() {
+      Html5Qrcode.getCameras()
+        .then((devices) => {
+          console.log("getCameras: start");
+          if (devices && devices.length) {
+              addSelectCameraEl(devices);
+              document.getElementById('scan-button').disabled = false;
+          }
+        })
+        .catch((err) => {
+          console.log("getCameras: " + err);
+        });
+    }
+  </script>
+</div>
