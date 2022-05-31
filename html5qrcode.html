@@ -87,8 +87,11 @@
   }
 
   #scan-button {
-    width: 150px;
     margin-top: 51px;
+  }
+
+  .button {
+    width: 150px;
     background: white;
     border: 1px solid grey;
     border-radius: 7px;
@@ -104,9 +107,12 @@
           <label>Выбрать камеру:</label>
           <select id="camerachoose"></select>
         </div>
-        <button id="scan-button" onClick="scan()" disabled>Сканировать</button>
+        <button class="button"  id="scan-button" onClick="scan()" disabled>Сканировать</button>
       </div>
       <div id="reader-results">
+        <div style="display: flex; width: 100%;align-items: center;justify-content: center;">
+          <button class="button" id="stopscan-button" onClick="stop()" style="display: none">Стоп</button>
+        </div>
         <h3>Результаты</h3>
         <textarea id="result-textarea"></textarea>
       </div>
@@ -131,6 +137,7 @@
     function scan() {
        const html5QrCodeReader = new Html5Qrcode("reader");
             var cameraId = document.getElementById("camerachoose").value;
+            document.getElementById('stopscan-button').style.display = 'block';
             html5QrCodeReader
               .start(
                 cameraId,
@@ -143,7 +150,7 @@
                 },
                 (decodedText, decodedResult) => {
                   let textarea = document.getElementById("result-textarea");
-                  textarea.value += decodedText;
+                  textarea.value += decodedText + '/n';
                   console.log(decodedResult);
                 },
                 (errorMessage) => {
@@ -153,6 +160,14 @@
               .catch((err) => {
                 console.log("scan: " + err);
               });
+    }
+
+    function stop() {
+      html5QrCode.stop().then((ignore) => {
+          document.getElementById('stopscan-button').style.display = 'none';
+        }).catch((err) => {
+          
+        });
     }
 
     function getCameras() {
