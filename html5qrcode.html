@@ -134,6 +134,27 @@
   </div>
 
   <script>
+    var qrboxFunction = function(viewfinderWidth, viewfinderHeight) {
+        // Square QR Box, with size = 80% of the min edge.
+        var minEdgeSizeThreshold = 250;
+        var edgeSizePercentage = 0.8;
+
+        var minEdgeSize = (viewfinderWidth > viewfinderHeight) ?
+            viewfinderHeight : viewfinderWidth;
+        var qrboxEdgeSize = Math.floor(minEdgeSize * edgeSizePercentage);
+        if (qrboxEdgeSize < minEdgeSizeThreshold) {
+            if (minEdgeSize < minEdgeSizeThreshold) {
+                return {width: minEdgeSize, height: minEdgeSize};
+            } else {
+                return {
+                    width: minEdgeSizeThreshold,
+                    height: minEdgeSizeThreshold
+                };
+            }
+        }
+        return {width: qrboxEdgeSize, height: qrboxEdgeSize};
+    }
+
     var resultContainer = document.getElementById("qr-reader-results");
     var html5QrCodeReader = null;
     function addSelectCameraEl(cameras) {
@@ -162,10 +183,7 @@
                 cameraId,
                 {
                   fps: 15, // Optional, frame per seconds for qr code scanning
-                  qrbox: {
-                    width: 450,
-                    height: 450,
-                  }, // Optional, if you want bounded box UI
+                  qrbox: qrboxFunction, // Optional, if you want bounded box UI
                 },
                 (decodedText, decodedResult) => {
                   console.log('image: ' + document.getElementById('qr-canvas').toDataURL("image/png"));
