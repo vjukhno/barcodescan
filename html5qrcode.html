@@ -100,6 +100,7 @@
 </style>
 <div class="main">
     <div id="reader">
+        <div id="scanner-area"></div>
         <div id="getpermission">
             <button id="permission-button" onClick="getCameras()">Дать доступ к камере</button>
         </div>
@@ -135,7 +136,7 @@
     }
 
     function scan() {
-       html5QrCodeReader = new Html5Qrcode("reader");
+       html5QrCodeReader = new Html5Qrcode("scanner-area");
             var cameraId = document.getElementById("camerachoose").value;
             document.getElementById('stopscan-button').style.display = 'block';
             html5QrCodeReader
