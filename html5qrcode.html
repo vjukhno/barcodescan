@@ -100,7 +100,13 @@
 
   #resume-button {
     margin-bottom: 30px;
+    color: green;
   }
+
+  button#resume-button[disabled] {
+    border-color: grey;
+    color: grey;
+}
 
 </style>
 <div class="main">
@@ -162,6 +168,7 @@
                   }, // Optional, if you want bounded box UI
                 },
                 (decodedText, decodedResult) => {
+                  console.log('image: ' + document.getElementById('qr-canvas').toDataURL("image/png"));
                   let textarea = document.getElementById("result-textarea");
                   textarea.value += decodedText + '\n';
                   console.log(decodedResult);
@@ -184,6 +191,7 @@
             document.getElementById('resume-button').style.display = 'none';
             document.getElementById('settings').style.display = 'block';
             this.html5QrCodeReader.clear();
+            
           }).catch((err) => {
             
           });
@@ -192,6 +200,7 @@
 
     function resume() {
       this.html5QrCodeReader.resume();
+      document.getElementById('resume-button').disabled = true;
     }
 
     function getCameras() {
