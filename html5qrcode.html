@@ -138,7 +138,8 @@
         alert('Barcode Detector is not supported by this browser.');
       } else {
         alert('Barcode Detector supported!');
-        
+      }
+
     var qrboxFunction = function(viewfinderWidth, viewfinderHeight) {
         // Square QR Box, with size = 80% of the min edge.
         var minEdgeSizeThreshold = 250;
@@ -191,7 +192,7 @@
                   qrbox: qrboxFunction, // Optional, if you want bounded box UI
                   aspectRatio: 1.7777778,
                   experimentalFeatures: {
-                    useBarCodeDetectorIfSupported: false
+                    useBarCodeDetectorIfSupported: true
                   },
                 },
                 (decodedText, decodedResult) => {
