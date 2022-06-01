@@ -182,12 +182,9 @@
               .start(
                 cameraId,
                 {
-                  fps: 15, // Optional, frame per seconds for qr code scanning
+                  fps: 30, // Optional, frame per seconds for qr code scanning
                   qrbox: qrboxFunction, // Optional, if you want bounded box UI
                   aspectRatio: 1.7777778,
-                  experimentalFeatures: {
-                    useBarCodeDetectorIfSupported: true
-                  },
                 },
                 (decodedText, decodedResult) => {
                   console.log('image: ' + document.getElementById('qr-canvas').toDataURL("image/png"));
